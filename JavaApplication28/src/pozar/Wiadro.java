@@ -27,7 +27,7 @@ class Wiadro {
         this.pelne = stan;
     }
 
-    public String state() {
+    public String status() {
         if (jestPelne()) {
             return "pełne(" + id + ")" ;
         } else {

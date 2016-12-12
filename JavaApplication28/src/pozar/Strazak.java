@@ -13,57 +13,53 @@ import java.util.concurrent.Exchanger;
  */
 class Strazak implements Runnable {
 
-    int id;
+    String name;
     Exchanger<Wiadro> el, er;
     Wiadro w;
 
-    /**
-     *
-     * @param id
-     * @param el
-     * @param er
-     */
-    public Strazak(int id, Exchanger<Wiadro> el, Exchanger<Wiadro> er, Wiadro w) {
-        this.id = id;
+    
+   
+    
+
+    public Strazak(String name, Exchanger<Wiadro> el, Exchanger<Wiadro> er, Wiadro w) {
+        this.name = name;
         this.el = el;
         this.er = er;
         this.w = w;
     }
 
-    /**
-     *
-     */
+    
     @Override
     public void run() {
         try {
             while (true) {
                 if (el == null) { 
                     if (w.jestPelne()) {
-                        passingToTheRight();
+                        podajeWPrawo();
                         w = er.exchange(w);
-                        passedToTheRight();
+                        odbieraOdPrawego();
                     } else {
-                        refillBucket();
+                        napelnianieWiadra();
                         w.setNapelnanie(true);
                     }
                 } else if (er == null) { 
                     if (!w.jestPelne()) {
-                        passingToTheLeft();
+                        podajeWLewo();
                         w = el.exchange(w);
-                        passedToTheLeft();
+                        odebrałOdLewego();
                     } else {
-                        emptyBucket();
+                        pusteWiadro();
                         w.setNapelnanie(false);
                     }
                 } else { 
                     if (w.jestPelne()) {
-                        passingToTheRight();
+                        podajeWPrawo();
                         w = er.exchange(w);
-                        passedToTheRight();
+                        odbieraOdPrawego();
                     } else {
-                        passingToTheLeft();
+                        podajeWLewo();
                         w = el.exchange(w);
-                        passedToTheLeft();
+                        odebrałOdLewego();
                     }
                 }
             }
@@ -72,51 +68,42 @@ class Strazak implements Runnable {
         }
     }
 
-    private void passingToTheRight() {
-        System.out.println(id + " przekazuje wiadro " + w.state() + " w prawo.");
+    private void podajeWPrawo() {
+        System.out.println(name + " przekazuje wiadro " + w.status() + " w prawo.");
         sleep();
     }
 
-    private void passedToTheRight() {
-        System.out.println(id + " odebrał od prawego wiadro " + w.state());
+    private void odbieraOdPrawego() {
+        System.out.println(name + " odebrał od prawego wiadro " + w.status());
         sleep();
     }
 
-    private void refillBucket() {
-        System.out.println(id + " napełnia wiadro " + w.state() + ". [NAPELNIA]");
+    private void napelnianieWiadra() {
+        System.out.println(name + "      NAPEŁNIA wiadro " + w.status() );
         sleep();
     }
 
-    /**
-     *
-     */
-    private void passedToTheLeft() {
-        System.out.println(id + " odebrał od lewego wiadro " + w.state());
+    
+    private void odebrałOdLewego() {
+        System.out.println(name + "                odebrał od lewego wiadro " + w.status());
         sleep();
     }
 
-    /**
-     *
-     */
-    private void passingToTheLeft() {
-        System.out.println(id + " przekazuje wiadro " + w.state() + " w lewo.");
+    
+    private void podajeWLewo() {
+        System.out.println(name + "                przekazuje wiadro " + w.status() + " w lewo.");
         sleep();
     }
 
-    /**
-     *
-     */
-    private void emptyBucket() {
-        System.out.println(id + " opróżnia wiadro " + w.state() + ". [GASI POZAR]");
+    
+    private void pusteWiadro() {
+        System.out.println(name + "       WYLEWA wiadro " + w.status() );
         sleep();
     }
 
-    /**
-     *
-     */
+    
     private void sleep() {
         try {
-            // Thread.sleep(1000 + (long)(Math.random() * 1000));
             Thread.sleep((long)(Math.random() * 1000));
         } catch (InterruptedException e) {
             e.printStackTrace();
