@@ -11,6 +11,7 @@ import java.util.concurrent.Exchanger;
  *
  * @author Dominika
  */
+
 class Strazak implements Runnable {
 
     String name;
@@ -35,31 +36,31 @@ class Strazak implements Runnable {
             while (true) {
                 if (el == null) { 
                     if (w.jestPelne()) {
-                        podajeWPrawo();
+                        System.out.println(name + " przekazuje wiadro " + w.status() + " >>>>");
                         w = er.exchange(w);
-                        odbieraOdPrawego();
+                        System.out.println(name + " odebrał od prawego wiadro " + w.status());
                     } else {
-                        napelnianieWiadra();
+                        System.out.println(name + " NAPEŁNIA wiadro " + w.status() );
                         w.setNapelnanie(true);
                     }
                 } else if (er == null) { 
                     if (!w.jestPelne()) {
-                        podajeWLewo();
+                         System.out.println(name + " przekazuje wiadro " + w.status() + " <<<<");
                         w = el.exchange(w);
-                        odebrałOdLewego();
+                        System.out.println(name + "odebrał od lewego wiadro " + w.status());
                     } else {
-                        pusteWiadro();
+                         System.out.println(name + " WYLEWA wiadro " + w.status() );
                         w.setNapelnanie(false);
                     }
                 } else { 
                     if (w.jestPelne()) {
-                        podajeWPrawo();
+                        System.out.println(name + " przekazuje wiadro " + w.status() + " >>>>");
                         w = er.exchange(w);
-                        odbieraOdPrawego();
+                         System.out.println(name + " odebrał od prawego wiadro " + w.status());
                     } else {
-                        podajeWLewo();
+                        System.out.println(name + " przekazuje wiadro " + w.status() + " <<<<");
                         w = el.exchange(w);
-                        odebrałOdLewego();
+                        System.out.println(name + " odebrał od lewego wiadro " + w.status());
                     }
                 }
             }
@@ -68,43 +69,10 @@ class Strazak implements Runnable {
         }
     }
 
-    private void podajeWPrawo() {
-        System.out.println(name + " przekazuje wiadro " + w.status() + " w prawo.");
-        sleep();
-    }
-
-    private void odbieraOdPrawego() {
-        System.out.println(name + " odebrał od prawego wiadro " + w.status());
-        sleep();
-    }
-
-    private void napelnianieWiadra() {
-        System.out.println(name + "      NAPEŁNIA wiadro " + w.status() );
-        sleep();
-    }
-
-    
-    private void odebrałOdLewego() {
-        System.out.println(name + "                odebrał od lewego wiadro " + w.status());
-        sleep();
-    }
-
-    
-    private void podajeWLewo() {
-        System.out.println(name + "                przekazuje wiadro " + w.status() + " w lewo.");
-        sleep();
-    }
-
-    
-    private void pusteWiadro() {
-        System.out.println(name + "       WYLEWA wiadro " + w.status() );
-        sleep();
-    }
-
-    
+  
     private void sleep() {
         try {
-            Thread.sleep((long)(Math.random() * 1000));
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

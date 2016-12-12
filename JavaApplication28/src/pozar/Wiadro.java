@@ -14,9 +14,9 @@ class Wiadro {
     private boolean pelne = false;
     private int id;
 
-    public Wiadro(int id, boolean isBucketFull) {
+    public Wiadro(int id, boolean napelnione) {
         this.id = id;
-        setNapelnanie(isBucketFull);
+        setNapelnanie(napelnione);
     }
 
     public boolean jestPelne() {
